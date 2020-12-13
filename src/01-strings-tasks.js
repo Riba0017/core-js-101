@@ -235,8 +235,26 @@ function getRectangleString(width, height) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  function replacer(c) {
+    let f = c;
+    let s = c;
+    let k;
+    if (f <= 'Z') {
+      f = 90;
+    } else {
+      f = 122;
+    }
+    s = s.charCodeAt(0) + 13;
+
+    if (f >= s) {
+      k = s;
+    } else {
+      k = s - 26;
+    }
+    return String.fromCharCode(k);
+  }
+  return str.replace(/[a-zA-Z]/g, replacer);
 }
 
 /**
@@ -252,15 +270,16 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  if (typeof value === 'string' || value instanceof String) return true;
+  return false;
 }
 
 
 /**
  * Returns playid card id.
  *
- * Playing cards inittial deck inclides the cards in the following order:
+ * Playing cards initial deck includes the cards in the following order:
  *
  *  'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
  *  'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
@@ -281,8 +300,10 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  const suits = ['♣', '♦', '♥', '♠'];
+  return cards.indexOf(value.slice(0, -1)) + suits.indexOf(value.slice(-1)) * cards.length;
 }
 
 
